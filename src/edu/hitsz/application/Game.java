@@ -3,6 +3,13 @@ package edu.hitsz.application;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.factory.enemy.EliteFactory;
+import edu.hitsz.factory.enemy.EnemyFactory;
+import edu.hitsz.factory.enemy.MobFactory;
+import edu.hitsz.prop.BaseProp;
+import edu.hitsz.prop.BloodProp;
+import edu.hitsz.prop.BombProp;
+import edu.hitsz.prop.FireProp;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import javax.swing.*;
@@ -32,9 +39,11 @@ public class Game extends JPanel {
     private int timeInterval = 40;
 
     private final HeroAircraft heroAircraft;
-    private final List<AbstractAircraft> enemyAircrafts;
+    private final List<AbstractEnemyAircraft> enemyAircrafts;
     private final List<BaseBullet> heroBullets;
     private final List<BaseBullet> enemyBullets;
+    private final List<BaseProp> props;
+    private EnemyFactory enemyFactory;
 
     /**
      * 屏幕中出现的敌机最大数量
@@ -45,6 +54,11 @@ public class Game extends JPanel {
      * 当前得分
      */
     private int score = 0;
+
+    public int getScore() {
+        return score;
+    }
+
     /**
      * 当前时刻
      */
@@ -63,11 +77,8 @@ public class Game extends JPanel {
     private boolean gameOverFlag = false;
 
     public Game() {
-        heroAircraft = new HeroAircraft(
-                Main.WINDOW_WIDTH / 2,
-                Main.WINDOW_HEIGHT - ImageManager.HERO_IMAGE.getHeight() ,
-                0, 0, 100);
-
+        heroAircraft = HeroAircraft.getInstance();
+        props = new LinkedList<>();
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
@@ -92,27 +103,28 @@ public class Game extends JPanel {
 
         // 定时任务：绘制、对象产生、碰撞判定、击毁及结束判定
         Runnable task = () -> {
-
             time += timeInterval;
-
 
             // 周期性执行（控制频率）
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
                 // 新敌机产生
-
                 if (enemyAircrafts.size() < enemyMaxNumber) {
-                    enemyAircrafts.add(new MobEnemy(
-                            (int) (Math.random() * (Main.WINDOW_WIDTH - ImageManager.MOB_ENEMY_IMAGE.getWidth())),
-                            (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05),
-                            0,
-                            10,
-                            30
-                    ));
+                    // 随机产生普通敌机(80%)或精英敌机(20%)
+                    double randNum = Math.random();
+                    if (randNum < 0.8) {
+                        enemyFactory = new MobFactory();
+                    } else {
+                        enemyFactory = new EliteFactory();
+                    }
+                    enemyAircrafts.add(enemyFactory.createEnemyAircraft());
                 }
                 // 飞机射出子弹
                 shootAction();
             }
+
+            //道具移动
+            propsMoveAction();
 
             // 子弹移动
             bulletsMoveAction();
@@ -135,6 +147,7 @@ public class Game extends JPanel {
                 executorService.shutdown();
                 gameOverFlag = true;
                 System.out.println("Game Over!");
+                heroAircraft.increaseHp(100);
             }
 
         };
@@ -163,8 +176,10 @@ public class Game extends JPanel {
     }
 
     private void shootAction() {
-        // TODO 敌机射击
-
+        // 敌机射击
+        for (AbstractEnemyAircraft aea : enemyAircrafts) {
+            enemyBullets.addAll(aea.shoot());
+        }
         // 英雄射击
         heroBullets.addAll(heroAircraft.shoot());
     }
@@ -184,6 +199,12 @@ public class Game extends JPanel {
         }
     }
 
+    private void propsMoveAction() {
+        for (BaseProp prop : props) {
+            prop.forward();
+        }
+    }
+
 
     /**
      * 碰撞检测：
@@ -192,14 +213,23 @@ public class Game extends JPanel {
      * 3. 英雄获得补给
      */
     private void crashCheckAction() {
-        // TODO 敌机子弹攻击英雄
+        // 敌机子弹攻击英雄
+        for (BaseBullet bullet : enemyBullets) {
+            if (bullet.notValid()) {
+                continue;
+            }
+            if (heroAircraft.crash(bullet)) {
+                heroAircraft.decreaseHp(bullet.getPower());
+                bullet.vanish();
+            }
+        }
 
         // 英雄子弹攻击敌机
         for (BaseBullet bullet : heroBullets) {
             if (bullet.notValid()) {
                 continue;
             }
-            for (AbstractAircraft enemyAircraft : enemyAircrafts) {
+            for (AbstractEnemyAircraft enemyAircraft : enemyAircrafts) {
                 if (enemyAircraft.notValid()) {
                     // 已被其他子弹击毁的敌机，不再检测
                     // 避免多个子弹重复击毁同一敌机的判定
@@ -211,11 +241,12 @@ public class Game extends JPanel {
                     enemyAircraft.decreaseHp(bullet.getPower());
                     bullet.vanish();
                     if (enemyAircraft.notValid()) {
-                        // TODO 获得分数，产生道具补给
-                        score += 10;
+                        // 获得分数，产生道具补给
+                        score += enemyAircraft.getScore();
+                        props.addAll(enemyAircraft.generateNewProp());
                     }
                 }
-                // 英雄机 与 敌机 相撞，均损毁
+                // 英雄机与敌机相撞，均损毁
                 if (enemyAircraft.crash(heroAircraft) || heroAircraft.crash(enemyAircraft)) {
                     enemyAircraft.vanish();
                     heroAircraft.decreaseHp(Integer.MAX_VALUE);
@@ -223,8 +254,23 @@ public class Game extends JPanel {
             }
         }
 
-        // Todo: 我方获得道具，道具生效
-
+        // 我方获得道具，道具生效
+        for (BaseProp prop : props) {
+            if (prop.notValid()) {
+                continue;
+            }
+            if (heroAircraft.crash(prop)) {
+                if (prop instanceof BloodProp) {
+                    ((BloodProp) prop).addBlood(heroAircraft);
+                } else if (prop instanceof BombProp) {
+                    ((BombProp) prop).bomb();
+                } else if (prop instanceof FireProp) {
+                    ((FireProp) prop).fire();
+                } else {
+                    prop.vanish();
+                }
+            }
+        }
     }
 
     /**
