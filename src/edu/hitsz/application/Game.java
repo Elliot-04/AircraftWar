@@ -277,6 +277,7 @@ public class Game extends JPanel {
      * 后处理：
      * 1. 删除无效的子弹
      * 2. 删除无效的敌机
+     * 3. 删除无效的道具
      * <p>
      * 无效的原因可能是撞击或者飞出边界
      */
@@ -284,6 +285,7 @@ public class Game extends JPanel {
         enemyBullets.removeIf(AbstractFlyingObject::notValid);
         heroBullets.removeIf(AbstractFlyingObject::notValid);
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
+        props.removeIf(AbstractFlyingObject::notValid);
     }
 
 
@@ -313,7 +315,7 @@ public class Game extends JPanel {
         // 这样子弹显示在飞机的下层
         paintImageWithPositionRevised(g, enemyBullets);
         paintImageWithPositionRevised(g, heroBullets);
-
+        paintImageWithPositionRevised(g, props);
         paintImageWithPositionRevised(g, enemyAircrafts);
 
         g.drawImage(ImageManager.HERO_IMAGE, heroAircraft.getLocationX() - ImageManager.HERO_IMAGE.getWidth() / 2,
