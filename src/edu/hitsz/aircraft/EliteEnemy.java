@@ -4,7 +4,7 @@ import edu.hitsz.application.Main;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.factory.prop.BloodPropFactory;
 import edu.hitsz.factory.prop.BombPropFactory;
-import edu.hitsz.factory.prop.FirePropFactory;
+import edu.hitsz.factory.prop.BulletPropFactory;
 import edu.hitsz.prop.BaseProp;
 import edu.hitsz.strategy.DirectShoot;
 
@@ -41,7 +41,7 @@ public class EliteEnemy extends AbstractEnemyAircraft {
             } else if (isGenProp < 0.6) {
                 propFactory = new BombPropFactory();
             } else if (isGenProp < 0.8) {
-                propFactory = new FirePropFactory();
+                propFactory = new BulletPropFactory();
             } else {
                 propFactory = null;
             }

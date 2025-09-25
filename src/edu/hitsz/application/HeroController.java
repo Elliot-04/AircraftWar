@@ -16,7 +16,7 @@ public class HeroController {
     private HeroAircraft heroAircraft;
     private MouseAdapter mouseAdapter;
 
-    public HeroController(Game game, HeroAircraft heroAircraft){
+    public HeroController(Game game, HeroAircraft heroAircraft) {
         this.game = game;
         this.heroAircraft = heroAircraft;
 

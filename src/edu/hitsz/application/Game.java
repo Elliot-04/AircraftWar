@@ -9,7 +9,7 @@ import edu.hitsz.factory.enemy.MobFactory;
 import edu.hitsz.prop.BaseProp;
 import edu.hitsz.prop.BloodProp;
 import edu.hitsz.prop.BombProp;
-import edu.hitsz.prop.FireProp;
+import edu.hitsz.prop.BulletProp;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import javax.swing.*;
@@ -264,8 +264,8 @@ public class Game extends JPanel {
                     ((BloodProp) prop).addBlood(heroAircraft);
                 } else if (prop instanceof BombProp) {
                     ((BombProp) prop).bomb();
-                } else if (prop instanceof FireProp) {
-                    ((FireProp) prop).fire();
+                } else if (prop instanceof BulletProp) {
+                    ((BulletProp) prop).fire();
                 } else {
                     prop.vanish();
                 }

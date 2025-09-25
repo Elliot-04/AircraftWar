@@ -24,15 +24,21 @@ public class DirectShoot implements ShootStrategy {
         int power = aircraft.getPower();
         BaseBullet bullet;
 
-        if (aircraft instanceof AbstractEnemyAircraft) {
+        if (aircraft instanceof HeroAircraft) {
+            for (int i = 0; i < shootNum; i++){
+                // 英雄机发射英雄机子弹
+                // 子弹发射位置相对飞机位置向前偏移
+                // 多个子弹横向分散
+                bullet = new HeroBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
+                res.add(bullet);
+            }
+        } else if (aircraft instanceof AbstractEnemyAircraft){
+            // 敌机发射敌机子弹
             speedY -= 3; // 敌机子弹速度较慢
-        }
-
-        for (int i = 0; i < shootNum; i++){
-            // 子弹发射位置相对飞机位置向前偏移
-            // 多个子弹横向分散
-            bullet = new BaseBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
-            res.add(bullet);
+            for (int i = 0; i < shootNum; i++){
+                bullet = new EnemyBullet(x + (i * 2 - shootNum + 1) * 10, y, speedX, speedY, power);
+                res.add(bullet);
+            }
         }
         return res;
     }

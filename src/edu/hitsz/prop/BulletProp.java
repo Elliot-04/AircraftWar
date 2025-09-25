@@ -3,9 +3,9 @@ package edu.hitsz.prop;
 /**
  * 火力道具
  */
-public class FireProp extends BaseProp{
+public class BulletProp extends BaseProp{
 
-    public FireProp(int locationX, int locationY, int speedX, int speedY) {
+    public BulletProp(int locationX, int locationY, int speedX, int speedY) {
         super(locationX, locationY, speedX, speedY);
     }
 
