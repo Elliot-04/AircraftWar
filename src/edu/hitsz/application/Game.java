@@ -266,9 +266,8 @@ public class Game extends JPanel {
                     ((BombProp) prop).bomb();
                 } else if (prop instanceof BulletProp) {
                     ((BulletProp) prop).fire();
-                } else {
-                    prop.vanish();
                 }
+                prop.vanish();
             }
         }
     }

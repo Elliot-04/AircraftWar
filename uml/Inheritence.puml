@@ -29,30 +29,54 @@ abstract class AbstractAircraft
 {
 	# maxHp:int
     # hp:int
+    # shootStrategy:ShootStrategy
+    # shootNum:int
+    # direction:int
+    # power:int
+    + setShootNum(int shootNum): void
     + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + decreaseHp(int decrease):void
+    + setShootStrategy(ShootStrategy shootStrategy): void
+    + getShootNum(): int
+    + getDirection(): int
+    + getPower(): int
     + getHp():int
-    + {abstract} shoot():List<BaseBullet>
+    + shoot():List<BaseBullet>
  }
 
+abstract class AbstractEnemyAircraft{
+    # score: int
+    # propNum: int
+    # propFactory: PropFactory
+    + getScore():int
+    + AbstractEnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + {abstract} generateNewProp():BaseProp
+}
+AbstractAircraft <|-- AbstractEnemyAircraft
 
 class HeroAircraft {
-    - shootNum:int
-    - power:int
-    - direction:int
     + HeroAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
     + forward():void
+    + increaseHp(int increase): void
     + shoot():List<BaseBullet>
 }
-
 AbstractAircraft <|-- HeroAircraft
 
 class MobEnemy {
-    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp)
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
     + forward():void
     + shoot():List<BaseBullet>
+    + generateNewProp():List<BaseProp>
 }
-AbstractAircraft <|-- MobEnemy
+AbstractEnemyAircraft <|-- MobEnemy
+
+class EliteEnemy {
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + forward():void
+    + generateNewProp():List<BaseProp>
+    + shoot():List<BaseBullet>
+}
+AbstractEnemyAircraft <|-- EliteEnemy
 
 abstract class BaseBullet
 {
@@ -75,7 +99,33 @@ class EnemyBullet {
 BaseBullet <|-- HeroBullet
 BaseBullet <|-- EnemyBullet
 
+abstract class BaseProp
+{
+    + BaseProp(int locationX, int locationY, int speedX, int speedY)
+    + BaseProp()
+    + forward():void
+}
+
+class BloodProp {
+    - blood:int
+    + BloodProp(int locationX, int locationY,int speedX, int speedY)
+    + addBlood(HeroAircraft heroAircraft): void
+}
+class BombProp {
+    - power:int
+    + BombProp(int locationX, int locationY,int speedX, int speedY)
+    + bomb(): void
+}
+class BulletProp {
+    + BulletProp(int locationX, int locationY,int speedX, int speedY)
+    + fire(): void
+}
+BaseProp <|-- BloodProp
+BaseProp <|-- BombProp
+BaseProp <|-- BulletProp
+
 AbstractFlyingObject <|-- AbstractAircraft
 AbstractFlyingObject <|-- BaseBullet
+AbstractFlyingObject <|-- BaseProp
 
 @enduml
