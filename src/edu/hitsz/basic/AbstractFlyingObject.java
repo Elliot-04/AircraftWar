@@ -167,5 +167,8 @@ public abstract class AbstractFlyingObject {
         isValid = false;
     }
 
+    public int getSpeedX() {
+        return speedX;
+    }
 }
 

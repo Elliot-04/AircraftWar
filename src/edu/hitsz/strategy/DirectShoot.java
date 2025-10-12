@@ -7,15 +7,16 @@ import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.bullet.EnemyBullet;
 import edu.hitsz.bullet.HeroBullet;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import java.util.List;
+
 /**
  * 直射模式
  */
 public class DirectShoot implements ShootStrategy {
     @Override
     public List<BaseBullet> doShoot(AbstractAircraft aircraft) {
-        List<BaseBullet> res = new LinkedList<>();
+        List<BaseBullet> res = new ArrayList<>();
         int x = aircraft.getLocationX();
         int y = aircraft.getLocationY() + aircraft.getDirection() * 2;
         int speedX = 0;
