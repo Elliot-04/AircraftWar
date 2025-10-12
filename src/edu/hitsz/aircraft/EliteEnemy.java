@@ -46,7 +46,7 @@ public class EliteEnemy extends AbstractEnemyAircraft {
                 propFactory = null;
             }
 
-            if (propFactory != null){
+            if (propFactory != null) {
                 props.add(propFactory.createProp(this.getLocationX(), this.getLocationY()));
             }
         }
