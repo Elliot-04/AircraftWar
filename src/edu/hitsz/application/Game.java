@@ -3,11 +3,11 @@ package edu.hitsz.application;
 import edu.hitsz.aircraft.*;
 import edu.hitsz.bullet.BaseBullet;
 import edu.hitsz.basic.AbstractFlyingObject;
+import edu.hitsz.dao.RankDao;
+import edu.hitsz.dao.impl.RankDaoImpl;
+import edu.hitsz.dao.pojo.Rank;
 import edu.hitsz.factory.enemy.*;
-import edu.hitsz.prop.BaseProp;
-import edu.hitsz.prop.BloodProp;
-import edu.hitsz.prop.BombProp;
-import edu.hitsz.prop.BulletProp;
+import edu.hitsz.prop.*;
 import org.apache.commons.lang3.concurrent.BasicThreadFactory;
 
 import javax.swing.*;
@@ -16,6 +16,8 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
+import java.text.SimpleDateFormat;
+
 
 /**
  * 游戏主面板，游戏启动
@@ -155,6 +157,24 @@ public class Game extends JPanel {
                 // 游戏结束
                 executorService.shutdown();
                 gameOverFlag = true;
+
+                // 打印得分排行榜
+                Date date = new Date();
+                SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
+                // String playerName = JOptionPane.showInputDialog(this, "游戏结束，请输入你的名字：");
+                String playerName = "testUsername";
+                if (playerName != null && !playerName.trim().isEmpty()) {
+                    RankDao rankDao = new RankDaoImpl();
+                    rankDao.add(new Rank(playerName, this.score, formatter.format(date)));
+                    System.out.println("*****************************************");
+                    System.out.println("               得分排行榜                  ");
+                    System.out.println("*****************************************");
+                    List<Rank> ranks = rankDao.select();
+                    for (int i = 0; i < ranks.size(); i++) {
+                        Rank rank = ranks.get(i);
+                        System.out.println("第" + (i + 1) + "名：" + rank.getName() + "，" + rank.getScore() + "，" + rank.getTime());
+                    }
+                }
                 System.out.println("Game Over!");
                 heroAircraft.increaseHp(100);
             }
@@ -284,7 +304,9 @@ public class Game extends JPanel {
                 } else if (prop instanceof BombProp) {
                     ((BombProp) prop).bomb();
                 } else if (prop instanceof BulletProp) {
-                    ((BulletProp) prop).fire();
+                    ((BulletProp) prop).scatterShoot(heroAircraft);
+                } else if (prop instanceof BulletPlusProp) {
+                    ((BulletPlusProp) prop).ringShoot(heroAircraft);
                 }
                 prop.vanish();
             }

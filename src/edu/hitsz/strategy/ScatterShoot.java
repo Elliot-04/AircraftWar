@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 扇射模式
+ * 散射模式
  */
 public class ScatterShoot implements ShootStrategy {
     @Override

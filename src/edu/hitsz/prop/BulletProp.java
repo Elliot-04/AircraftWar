@@ -1,5 +1,8 @@
 package edu.hitsz.prop;
 
+import edu.hitsz.aircraft.HeroAircraft;
+import edu.hitsz.strategy.ScatterShoot;
+
 /**
  * 火力道具
  */
@@ -9,8 +12,10 @@ public class BulletProp extends BaseProp{
         super(locationX, locationY, speedX, speedY);
     }
 
-    public void fire() {
-        System.out.println("FireSupply active!");
+    public void scatterShoot(HeroAircraft heroAircraft){
+        heroAircraft.setShootNum(3);
+        heroAircraft.setStartAngle(Math.PI / 12);
+        heroAircraft.setShootStrategy(new ScatterShoot());
     }
 
 }

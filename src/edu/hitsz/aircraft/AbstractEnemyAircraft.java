@@ -1,10 +1,7 @@
 package edu.hitsz.aircraft;
 
 import edu.hitsz.application.Main;
-import edu.hitsz.factory.prop.BloodPropFactory;
-import edu.hitsz.factory.prop.BombPropFactory;
-import edu.hitsz.factory.prop.BulletPropFactory;
-import edu.hitsz.factory.prop.PropFactory;
+import edu.hitsz.factory.prop.*;
 import edu.hitsz.prop.BaseProp;
 
 import java.util.ArrayList;
@@ -42,12 +39,14 @@ public abstract class AbstractEnemyAircraft extends AbstractAircraft {
         List<BaseProp> props = new ArrayList<>();
         for (int i = 0; i < propNum; i++) {
             double isGenProp = Math.random();
-            if (isGenProp < 0.4) {
+            if (isGenProp < 0.3) {
                 propFactory = new BloodPropFactory();
-            } else if (isGenProp < 0.6) {
+            } else if (isGenProp < 0.4) {
                 propFactory = new BombPropFactory();
-            } else if (isGenProp < 0.8) {
+            } else if (isGenProp < 0.6) {
                 propFactory = new BulletPropFactory();
+            } else if (isGenProp < 0.8) {
+                propFactory = new BulletPlusPropFactory();
             } else {
                 propFactory = null;
             }

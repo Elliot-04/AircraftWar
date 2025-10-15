@@ -66,6 +66,10 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
         return startAngle;
     }
 
+    public void setStartAngle(double startAngle) {
+        this.startAngle = startAngle;
+    }
+
     /**
      * 飞机射击方法
      * 非可射击对象返回空list
@@ -73,6 +77,8 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
     public List<BaseBullet> shoot() {
         return shootStrategy.doShoot(this);
     }
+
+
 }
 
 
