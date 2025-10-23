@@ -8,6 +8,8 @@ public class Rank {
     private int score;
     private String time;
 
+    public Rank() {}
+
     public Rank(String name, int score, String time) {
         this.name = name;
         this.score = score;
@@ -26,4 +28,13 @@ public class Rank {
         return time;
     }
 
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public void setName(String name) {this.name = name;}
 }

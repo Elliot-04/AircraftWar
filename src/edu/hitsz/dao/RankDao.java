@@ -9,7 +9,13 @@ import java.util.List;
  */
 public interface RankDao {
 
+    String[][] toArray();
+
     List<Rank> select();
 
+    void delete(Rank rank);
+
     void add(Rank rank);
+
+    Rank selectById(int row);
 }
