@@ -6,11 +6,44 @@ interface EnemyFactory{
 }
 
 class EliteFactory{
+    - locationX: int
+    - locationY: int
+    - speedX: int
+    - speedY: int
+    - hp: int
+    - score: int
     + createEnemyAircraft():AbstractEnemyAircraft
 }
 class MobFactory{
+    - locationX: int
+    - locationY: int
+    - speedX: int
+    - speedY: int
+    - hp: int
+    - score: int
     + createEnemyAircraft():AbstractEnemyAircraft
 }
+class ElitePlusFactory{
+    - locationX: int
+    - locationY: int
+    - speedX: int
+    - speedY: int
+    - hp: int
+    - score: int
+    + createEnemyAircraft():AbstractEnemyAircraft
+}
+class BossFactory{
+    - locationX: int
+    - locationY: int
+    - speedX: int
+    - speedY: int
+    - hp: int
+    - score: int
+    + BossFactory(int hp)
+    + createEnemyAircraft():AbstractEnemyAircraft
+}
+EnemyFactory <|.. ElitePlusFactory
+EnemyFactory <|.. BossFactory
 EnemyFactory <|.. EliteFactory
 EnemyFactory <|.. MobFactory
 
@@ -20,27 +53,36 @@ abstract AbstractEnemyAircraft{
     # propNum: int
     # propFactory: PropFactory
     + getScore():int
+    + forward():void
     + AbstractEnemyAircraft(int locationX, int locationY, int speedX, int speedY, int hp, int score)
-    + {abstract} generateNewProp():List<BaseProp>
+    + generateNewProp():List<BaseProp>
+    + update():int
 }
 
 class MobEnemy {
     + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
-    + forward():void
     + shoot():List<BaseBullet>
     + generateNewProp():List<BaseProp>
 }
 
+class BossEnemy {
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + update():int
+}
+
+class ElitePlusEnemy {
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + update():int
+}
+
 class EliteEnemy {
     + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
-    + forward():void
-    + generateNewProp():List<BaseProp>
-    + shoot():List<BaseBullet>
 }
 
 AbstractEnemyAircraft <.. EnemyFactory
 
 AbstractEnemyAircraft <|-- EliteEnemy
 AbstractEnemyAircraft <|-- MobEnemy
-
+AbstractEnemyAircraft <|-- ElitePlusEnemy
+AbstractEnemyAircraft <|-- BossEnemy
 @enduml

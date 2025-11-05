@@ -3,6 +3,7 @@ package edu.hitsz.aircraft;
 import edu.hitsz.application.Main;
 import edu.hitsz.factory.prop.*;
 import edu.hitsz.prop.BaseProp;
+import edu.hitsz.prop.BombObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
  * 敌机（BOSS, ELITE, MOB）
  * @author xzb
  */
-public abstract class AbstractEnemyAircraft extends AbstractAircraft {
+public abstract class AbstractEnemyAircraft extends AbstractAircraft implements BombObserver {
     protected int score;
     protected int propNum; // 掉落道具数量
     protected PropFactory propFactory;
@@ -57,5 +58,11 @@ public abstract class AbstractEnemyAircraft extends AbstractAircraft {
         }
 
         return props;
+    }
+
+    @Override
+    public int update() {
+        this.vanish();
+        return this.getScore();
     }
 }

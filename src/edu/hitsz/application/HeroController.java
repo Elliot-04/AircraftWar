@@ -1,9 +1,8 @@
 package edu.hitsz.application;
 
-import edu.hitsz.aircraft.HeroAircraft;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 英雄机控制类
@@ -12,14 +11,9 @@ import java.awt.event.MouseEvent;
  * @author hitsz
  */
 public class HeroController {
-    private Game game;
-    private HeroAircraft heroAircraft;
     private MouseAdapter mouseAdapter;
 
-    public HeroController(Game game, HeroAircraft heroAircraft) {
-        this.game = game;
-        this.heroAircraft = heroAircraft;
-
+    public HeroController(Game game, AtomicInteger heroDesiredLocationX, AtomicInteger heroDesiredLocationY) {
         mouseAdapter = new MouseAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
@@ -30,13 +24,11 @@ public class HeroController {
                     // 防止超出边界
                     return;
                 }
-                heroAircraft.setLocation(x, y);
+                heroDesiredLocationX.set(x);
+                heroDesiredLocationY.set(y);
             }
         };
-
         game.addMouseListener(mouseAdapter);
         game.addMouseMotionListener(mouseAdapter);
     }
-
-
 }

@@ -17,4 +17,14 @@ public class BossEnemy extends AbstractEnemyAircraft{
         this.shootStrategy = new RingShoot();
         this.propNum = 3;
     }
+
+    /**
+     * 重写观察者更新方法
+     * Boss敌机不受炸弹影响
+     */
+    @Override
+    public int update() {
+        // 不执行任何操作，返回0分
+        return 0;
+    }
 }

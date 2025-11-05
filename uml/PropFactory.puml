@@ -19,37 +19,50 @@ class BulletPropFactory {
     - speedY:int
     + createProp(int locationX, int locationY):BaseProp
 }
+class BulletPlusPropFactory {
+    - speedX:int
+    - speedY:int
+    + createProp(int locationX, int locationY):BaseProp
+}
 PropFactory <|.. BloodPropFactory
 PropFactory <|.. BombPropFactory
 PropFactory <|.. BulletPropFactory
+PropFactory <|.. BulletPlusPropFactory
 
 
 abstract class BaseProp {
     + BaseProp(int locationX, int locationY, int speedX, int speedY)
     + BaseProp()
     + forward():void
+    + directShoot(HeroAircraft heroAircraft):void
 }
 
 class BloodProp {
     - blood:int
     + BloodProp(int locationX, int locationY,int speedX, int speedY)
-    + addBlood():void
+    + addBlood(HeroAircraft heroAircraft):void
 }
 class BombProp {
+    - observers: List<BombObserver>
     + BombProp(int locationX, int locationY,int speedX, int speedY)
-    + bomb():void
+    + addObserver(BombObserver observer):void
+    + removeObserver(BombObserver observer):void
+    + bomb():int
 }
 class BulletProp {
     + BulletProp(int locationX, int locationY,int speedX, int speedY)
-    + fire():void
+    + scatterShoot(HeroAircraft heroAircraft)):void
+}
+class BulletPlusProp {
+    + BulletPlusProp(int locationX, int locationY,int speedX, int speedY)
+    + ringShoot(HeroAircraft heroAircraft)):void
 }
 
 
 BaseProp <|-- BloodProp
 BaseProp <|-- BombProp
 BaseProp <|-- BulletProp
-
-
+BaseProp <|-- BulletPlusProp
 BaseProp <.. PropFactory
 
 

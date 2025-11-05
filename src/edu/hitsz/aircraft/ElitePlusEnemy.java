@@ -18,4 +18,17 @@ public class ElitePlusEnemy extends AbstractEnemyAircraft {
         this.propNum = 1;
     }
 
+    /**
+     * 重写观察者更新方法
+     * 受到炸弹影响：血量减少 60
+     */
+    @Override
+    public int update() {
+        this.decreaseHp(60);
+        // 如果扣血后被摧毁，则返回分数
+        if (this.notValid()) {
+            return this.getScore();
+        }
+        return 0; // 未被摧毁，不加分
+    }
 }

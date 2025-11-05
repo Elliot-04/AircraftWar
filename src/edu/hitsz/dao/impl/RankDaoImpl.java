@@ -38,6 +38,10 @@ public class RankDaoImpl implements RankDao {
         }
     }
 
+    /**
+     * 将排行榜数据转换为二维字符串数组
+     * @return 包含排行榜数据的二维字符串数组
+     */
     @Override
     public String[][] toArray() {
         String[][] rankData = new String[ranks.size()][];
@@ -49,12 +53,19 @@ public class RankDaoImpl implements RankDao {
         return rankData;
     }
 
+    /**
+     * 按分数降序对排行榜进行排序
+     */
     @Override
     public List<Rank> select() {
         ranks.sort(Comparator.comparing(Rank::getScore).reversed());
         return ranks;
     }
 
+    /**
+     * 删除一条排行记录
+     * @param rank 要删除的排行记录
+     */
     @Override
     public void delete(Rank rank) {
         ranks.remove(rank);
@@ -69,6 +80,10 @@ public class RankDaoImpl implements RankDao {
         }
     }
 
+    /**
+     * 添加一条新的排行记录
+     * @param rank 要添加的排行记录
+     */
     @Override
     public void add(Rank rank) {
         ranks.add(rank);
@@ -81,6 +96,11 @@ public class RankDaoImpl implements RankDao {
         }
     }
 
+    /**
+     * 根据ID查询排行记录
+     * @param id 要查询的记录的ID
+     * @return 对应的排行记录
+     */
     @Override
     public Rank selectById(int id) {
         return ranks.get(id);

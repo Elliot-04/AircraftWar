@@ -1,0 +1,54 @@
+@startuml
+interface BombObserver {
+    + update(): int
+}
+
+class BossEnemy {
+    + BossEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + update(): int
+}
+
+class ElitePlusEnemy {
+    + ElitePlusEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + update(): int
+}
+
+class MobEnemy {
+    + MobEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+    + shoot(): List<BaseBullet>
+    + generateNewProp(): List<BaseProp>
+}
+
+class EliteEnemy {
+    + EliteEnemy(int locationX, int locationY, int speedX, int speedY, int hp, int score)
+}
+
+AbstractEnemyAircraft <|-- MobEnemy
+AbstractEnemyAircraft <|-- EliteEnemy
+AbstractEnemyAircraft <|-- BossEnemy
+AbstractEnemyAircraft <|-- ElitePlusEnemy
+
+abstract class AbstractEnemyAircraft {
+    + update(): int
+}
+
+class EnemyBullet {
+    + update(): int
+}
+
+class BombProp {
+    - observers: List<BombObserver>
+    + addObserver(BombObserver observer): void
+    + removeObserver(BombObserver observer): void
+    + bomb(): int
+}
+
+abstract class Game {
+    - crashCheckAction(): void
+}
+
+BombObserver <|.. AbstractEnemyAircraft
+BombObserver <|.. EnemyBullet
+BombObserver <--o BombProp
+Game ..> BombProp
+@enduml

@@ -17,5 +17,5 @@ public interface RankDao {
 
     void add(Rank rank);
 
-    Rank selectById(int row);
+    Rank selectById(int id);
 }

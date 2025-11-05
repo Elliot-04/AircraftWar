@@ -14,9 +14,28 @@ class ScatterShoot {
 }
 
 abstract class AbstractAircraft {
+    # maxHp: int
+    # hp: int
+    # shootNum: int
+    # power: int
+    # direction: int
+    # startAngle: double
     # shootStrategy: ShootStrategy
+    + AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp)
+    + decreaseHp(int decrease): void
+    + getHp(): int
+    + getShootNum(): int
+    + getDirection(): int
+    + getPower(): int
+    + getStartAngle(): double
+    + setShootNum(int shootNum): void
+    + setStartAngle(double startAngle): void
     + setShootStrategy(ShootStrategy shootStrategy): void
     + shoot(): List<BaseBullet>
+}
+
+abstract class Game {
+    # shootAction(): void
 }
 
 ShootStrategy <|.. DirectShoot

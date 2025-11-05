@@ -14,11 +14,15 @@ public class BossFactory implements EnemyFactory {
     private int locationY = (int) (Math.random() * Main.WINDOW_HEIGHT * 0.05);
     private int speedX = 5;
     private int speedY = 0;
-    private int hp = 500;
+    private int hp;
     private int score = 300;
+
+    public BossFactory(int hp) {
+        this.hp = hp;
+    }
 
     @Override
     public AbstractEnemyAircraft createEnemyAircraft() {
-        return new BossEnemy(locationX,locationY,speedX,speedY,hp,score);
+        return new BossEnemy(locationX, locationY, speedX, speedY, hp, score);
     }
 }

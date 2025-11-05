@@ -17,7 +17,7 @@ class 类
 
     + 构造函数(int 参数1)
     + 普通方法(int 参数1, String 参数2): void
-    + {abstract} 抽象方法(): int
+    # {abstract} 抽象方法(): int
     + {static} 静态方法(int 参数1, String 参数2): String
 }
 

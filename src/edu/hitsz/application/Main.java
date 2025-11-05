@@ -24,6 +24,8 @@ public class Main {
         // 获得屏幕的分辨率，初始化 Frame
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         JFrame frame = new JFrame("Aircraft War");
+        ImageIcon icon = new ImageIcon("src/images/hero.png");
+        frame.setIconImage(icon.getImage());
         frame.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         frame.setResizable(false);
         //设置窗口的大小和位置,居中放置

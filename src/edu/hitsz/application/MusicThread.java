@@ -22,6 +22,8 @@ public class MusicThread extends Thread {
     private byte[] samples;
     private boolean loopPlay;
 
+    private static final Object audioLock = new Object();
+
     public MusicThread(String filename) {
         //初始化filename
         this.filename = filename;
@@ -70,11 +72,14 @@ public class MusicThread extends Thread {
         //获取受数据行支持的音频格式DataLine.info
         Info info = new Info(SourceDataLine.class, audioFormat);
         try {
-            dataLine = (SourceDataLine) AudioSystem.getLine(info);
-            dataLine.open(audioFormat, size);
+            synchronized (audioLock) {
+                dataLine = (SourceDataLine) AudioSystem.getLine(info);
+                dataLine.open(audioFormat, size);
+            }
         } catch (LineUnavailableException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
+            return;
         }
         dataLine.start();
         try {
@@ -87,7 +92,7 @@ public class MusicThread extends Thread {
                     dataLine.write(buffer, 0, numBytesRead);
                 }
                 // 循环播放背景音乐
-                if (numBytesRead == -1 && (filename.equals("src/videos/bgm.wav") || filename.equals("src/videos/boss_bgm.wav"))) {
+                if (numBytesRead == -1 && (filename.equals("src/videos/bgm.wav") || filename.equals("src/videos/bgm_boss.wav"))) {
                     source.reset();
                     numBytesRead = 0;
                 }
