@@ -256,7 +256,8 @@ public abstract class Game extends JPanel {
                 if (isPlayMusic) {
                     if (bgmBossThread.isAlive()) bgmBossThread.stopMusic();
                     bgmThread.stopMusic();
-                    playSoundEffect("src/videos/game_over.wav");
+                    new MusicThread("src/videos/game_over.wav").start();
+                    // playSoundEffect("src/videos/game_over.wav");
                 }
 
                 System.out.println("Game Over!");
